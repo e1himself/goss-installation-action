@@ -1,10 +1,11 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'Install Goss'
+description: 'Install Goss (and dgoss) into GitHub actions runner'
+author: 'ivan.voskoboiynk@gmail.com'
 inputs:
-  myInput:              # change this
-    description: 'input description here'
-    default: 'default value if applicable'
+  version:
+    description: 'Goss release version to install'
+    default: 'v0.3.9'
+    required: false
 runs:
   using: 'node12'
   main: 'dist/index.js'
