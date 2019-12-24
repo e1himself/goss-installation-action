@@ -60,6 +60,7 @@ async function run(): Promise<void> {
     const cached = tc.find(TOOL, version, ARCH)
     const [directory] = Object.values(cached)
     if (!directory) {
+      core.setFailed(`Failed to instal and/or cache ${TOOL} files`)
       return
     }
     core.addPath(directory)
