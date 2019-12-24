@@ -3,6 +3,7 @@ import * as tc from '@actions/tool-cache'
 
 const TOOL = 'goss'
 const ARCH = 'amd64'
+const DEFAULT_VERSION = 'v0.3.9'
 
 interface CommandsMap {
   [command: string]: string
@@ -48,7 +49,8 @@ async function cache(
 
 async function run(): Promise<void> {
   try {
-    const version: string = core.getInput('version')
+    const version: string =
+      core.getInput('version', { required: false }) || DEFAULT_VERSION
     const existing = tc.find(TOOL, version, ARCH)
     if (existing) {
       core.debug(`Found cached ${TOOL} ${version}. Restoring.`)
