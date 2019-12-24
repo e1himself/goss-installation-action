@@ -1,4 +1,4 @@
-name: "build-test"
+name: "Build & test"
 on: # rebuild any PRs and main branch changes
   pull_request:
   push:
@@ -19,5 +19,3 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - uses: ./
-      with: 
-        milliseconds: 1000
