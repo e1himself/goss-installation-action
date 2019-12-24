@@ -19,3 +19,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - uses: ./
+    - run: 'which goss'
+    - run: 'which dgoss'
+    - run: 'which dcgoss'
+    - run: 'which kgoss'
