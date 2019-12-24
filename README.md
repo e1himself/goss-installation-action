@@ -15,7 +15,7 @@ Read more about Goss at https://goss.rocks/.
 
 ### `version`
 
-**Required** The required version of Goss to install. Default `"v0.3.9"`.
+**Optional** The required version of Goss to install. Default `"v0.3.9"`.
 
 ## Example usage
 
