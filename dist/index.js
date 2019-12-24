@@ -1266,7 +1266,6 @@ function combine(parts) {
 function download(urls) {
     return __awaiter(this, void 0, void 0, function* () {
         const results = yield Promise.all(Object.entries(urls).map(([command, url]) => __awaiter(this, void 0, void 0, function* () {
-            core.debug(`Downloading ${command} from ${url}`);
             const downloaded = yield tc.downloadTool(url);
             return { [command]: downloaded };
         })));
@@ -1276,7 +1275,6 @@ function download(urls) {
 function cache(paths, version) {
     return __awaiter(this, void 0, void 0, function* () {
         const results = yield Promise.all(Object.entries(paths).map(([command, path]) => __awaiter(this, void 0, void 0, function* () {
-            core.debug(`Caching ${command} ${version}`);
             const cached = yield tc.cacheFile(path, command, TOOL, version, ARCH);
             return { [command]: cached };
         })));
@@ -1289,7 +1287,6 @@ function run() {
             const version = core.getInput('version', { required: false }) || DEFAULT_VERSION;
             const existing = tc.find(TOOL, version, ARCH);
             if (existing) {
-                core.debug(`Found cached ${TOOL} ${version}. Restoring.`);
                 core.addPath(existing);
                 return;
             }
@@ -1298,7 +1295,6 @@ function run() {
             const cached = tc.find(TOOL, version, ARCH);
             const [directory] = Object.values(cached);
             if (!directory) {
-                core.setFailed(`Failed to instal and/or cache ${TOOL} files`);
                 return;
             }
             core.addPath(directory);
