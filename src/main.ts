@@ -25,7 +25,6 @@ function combine(parts: CommandsMap[]): CommandsMap {
 async function download(urls: CommandsMap): Promise<CommandsMap> {
   const results = await Promise.all(
     Object.entries(urls).map(async ([command, url]) => {
-      core.debug(`Downloading ${command} from ${url}`)
       const downloaded = await tc.downloadTool(url)
       return { [command]: downloaded }
     })
@@ -39,7 +38,6 @@ async function cache(
 ): Promise<CommandsMap> {
   const results = await Promise.all(
     Object.entries(paths).map(async ([command, path]) => {
-      core.debug(`Caching ${command} ${version}`)
       const cached = await tc.cacheFile(path, command, TOOL, version, ARCH)
       return { [command]: cached }
     })
@@ -53,7 +51,6 @@ async function run(): Promise<void> {
       core.getInput('version', { required: false }) || DEFAULT_VERSION
     const existing = tc.find(TOOL, version, ARCH)
     if (existing) {
-      core.debug(`Found cached ${TOOL} ${version}. Restoring.`)
       core.addPath(existing)
       return
     }
@@ -63,7 +60,6 @@ async function run(): Promise<void> {
     const cached = tc.find(TOOL, version, ARCH)
     const [directory] = Object.values(cached)
     if (!directory) {
-      core.setFailed(`Failed to instal and/or cache ${TOOL} files`)
       return
     }
     core.addPath(directory)
