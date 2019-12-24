@@ -11,7 +11,9 @@ interface CommandsMap {
 function getUrls(version: string): CommandsMap {
   return {
     goss: `https://github.com/aelsabbahy/goss/releases/download/${version}/goss-linux-${ARCH}`,
-    dgoss: `https://raw.githubusercontent.com/aelsabbahy/goss/${version}/extras/dgoss/dgoss`
+    dgoss: `https://raw.githubusercontent.com/aelsabbahy/goss/${version}/extras/dgoss/dgoss`,
+    dcgoss: `https://raw.githubusercontent.com/aelsabbahy/goss/${version}/extras/dcgoss/dcgoss`,
+    kgoss: `https://raw.githubusercontent.com/aelsabbahy/goss/${version}/extras/kgoss/kgoss`
   }
 }
 
