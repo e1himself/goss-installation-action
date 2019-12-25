@@ -1,3 +1,4 @@
+import fs from 'fs'
 import * as core from '@actions/core'
 import * as tc from '@actions/tool-cache'
 
@@ -43,6 +44,18 @@ async function download(urls: CommandsMap): Promise<CommandsMap> {
   return combine(results)
 }
 
+async function chmod(paths: CommandsMap, mode: string): Promise<void> {
+  await Promise.all(
+    Object.values(paths).map(async (path) => {
+      return new Promise((resolve, reject) => {
+        fs.chmod(path, mode, err => {
+          err ? reject(err) : resolve()
+        })
+      })
+    })
+  )
+}
+
 async function cache(
   paths: CommandsMap,
   version: string
@@ -69,6 +82,7 @@ async function run(): Promise<void> {
     const urls = getUrls(version)
     const missing = restore(urls, version)
     const downloaded = await download(missing)
+    await chmod(downloaded, '755')
     const cached = await cache(downloaded, version)
     addPaths(cached)
   } catch (error) {
