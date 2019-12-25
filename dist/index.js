@@ -1249,7 +1249,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(__webpack_require__(470));
 const tc = __importStar(__webpack_require__(533));
-const TOOL = 'goss';
 const ARCH = 'amd64';
 const DEFAULT_VERSION = 'v0.3.9';
 function getUrls(version) {
@@ -1263,6 +1262,17 @@ function getUrls(version) {
 function combine(parts) {
     return parts.reduce((result, part) => (Object.assign(Object.assign({}, result), part)), {});
 }
+function restore(urls, version) {
+    const results = Object.entries(urls).map(([command, url]) => {
+        const existing = tc.find(command, version, ARCH);
+        if (existing) {
+            core.addPath(existing);
+            return {};
+        }
+        return { [command]: url };
+    });
+    return combine(results);
+}
 function download(urls) {
     return __awaiter(this, void 0, void 0, function* () {
         const results = yield Promise.all(Object.entries(urls).map(([command, url]) => __awaiter(this, void 0, void 0, function* () {
@@ -1275,30 +1285,26 @@ function download(urls) {
 function cache(paths, version) {
     return __awaiter(this, void 0, void 0, function* () {
         const results = yield Promise.all(Object.entries(paths).map(([command, path]) => __awaiter(this, void 0, void 0, function* () {
-            const cached = yield tc.cacheFile(path, command, TOOL, version, ARCH);
+            const cached = yield tc.cacheFile(path, command, command, version, ARCH);
             return { [command]: cached };
         })));
         return combine(results);
     });
 }
+function addPaths(paths) {
+    for (const path of Object.values(paths)) {
+        core.addPath(path);
+    }
+}
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const version = core.getInput('version', { required: false }) || DEFAULT_VERSION;
-            const existing = tc.find(TOOL, version, ARCH);
-            if (existing) {
-                core.addPath(existing);
-                return;
-            }
-            const downloaded = yield download(getUrls(version));
-            yield cache(downloaded, version);
-            const cached = tc.find(TOOL, version, ARCH);
-            const [directory] = Object.values(cached);
-            if (!directory) {
-                core.setFailed(`Failed to instal and/or cache ${TOOL} files`);
-                return;
-            }
-            core.addPath(directory);
+            const urls = getUrls(version);
+            const missing = restore(urls, version);
+            const downloaded = yield download(missing);
+            const cached = yield cache(downloaded, version);
+            addPaths(cached);
         }
         catch (error) {
             core.setFailed(error.message);

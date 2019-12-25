@@ -1,7 +1,6 @@
 import * as core from '@actions/core'
 import * as tc from '@actions/tool-cache'
 
-const TOOL = 'goss'
 const ARCH = 'amd64'
 const DEFAULT_VERSION = 'v0.3.9'
 
@@ -22,6 +21,18 @@ function combine(parts: CommandsMap[]): CommandsMap {
   return parts.reduce((result, part) => ({ ...result, ...part }), {})
 }
 
+function restore(urls: CommandsMap, version: string): CommandsMap {
+  const results = Object.entries(urls).map(([command, url]) => {
+    const existing = tc.find(command, version, ARCH)
+    if (existing) {
+      core.addPath(existing)
+      return {}
+    }
+    return { [command]: url }
+  })
+  return combine(results)
+}
+
 async function download(urls: CommandsMap): Promise<CommandsMap> {
   const results = await Promise.all(
     Object.entries(urls).map(async ([command, url]) => {
@@ -38,32 +49,28 @@ async function cache(
 ): Promise<CommandsMap> {
   const results = await Promise.all(
     Object.entries(paths).map(async ([command, path]) => {
-      const cached = await tc.cacheFile(path, command, TOOL, version, ARCH)
+      const cached = await tc.cacheFile(path, command, command, version, ARCH)
       return { [command]: cached }
     })
   )
   return combine(results)
 }
 
+function addPaths(paths: CommandsMap): void {
+  for (const path of Object.values(paths)) {
+    core.addPath(path)
+  }
+}
+
 async function run(): Promise<void> {
   try {
     const version: string =
       core.getInput('version', { required: false }) || DEFAULT_VERSION
-    const existing = tc.find(TOOL, version, ARCH)
-    if (existing) {
-      core.addPath(existing)
-      return
-    }
-
-    const downloaded = await download(getUrls(version))
-    await cache(downloaded, version)
-    const cached = tc.find(TOOL, version, ARCH)
-    const [directory] = Object.values(cached)
-    if (!directory) {
-      core.setFailed(`Failed to install and/or cache ${TOOL} files`)
-      return
-    }
-    core.addPath(directory)
+    const urls = getUrls(version)
+    const missing = restore(urls, version)
+    const downloaded = await download(missing)
+    const cached = await cache(downloaded, version)
+    addPaths(cached)
   } catch (error) {
     core.setFailed(error.message)
   }
