@@ -1239,6 +1239,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
@@ -1247,6 +1250,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const fs_1 = __importDefault(__webpack_require__(747));
 const core = __importStar(__webpack_require__(470));
 const tc = __importStar(__webpack_require__(533));
 const ARCH = 'amd64';
@@ -1282,6 +1286,17 @@ function download(urls) {
         return combine(results);
     });
 }
+function chmod(paths, mode) {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield Promise.all(Object.values(paths).map((path) => __awaiter(this, void 0, void 0, function* () {
+            return new Promise((resolve, reject) => {
+                fs_1.default.chmod(path, mode, err => {
+                    err ? reject(err) : resolve();
+                });
+            });
+        })));
+    });
+}
 function cache(paths, version) {
     return __awaiter(this, void 0, void 0, function* () {
         const results = yield Promise.all(Object.entries(paths).map(([command, path]) => __awaiter(this, void 0, void 0, function* () {
@@ -1303,6 +1318,7 @@ function run() {
             const urls = getUrls(version);
             const missing = restore(urls, version);
             const downloaded = yield download(missing);
+            yield chmod(downloaded, '755');
             const cached = yield cache(downloaded, version);
             addPaths(cached);
         }

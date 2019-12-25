@@ -46,7 +46,7 @@ async function download(urls: CommandsMap): Promise<CommandsMap> {
 
 async function chmod(paths: CommandsMap, mode: string): Promise<void> {
   await Promise.all(
-    Object.values(paths).map(async (path) => {
+    Object.values(paths).map(async path => {
       return new Promise((resolve, reject) => {
         fs.chmod(path, mode, err => {
           err ? reject(err) : resolve()
