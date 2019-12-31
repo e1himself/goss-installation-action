@@ -1,5 +1,5 @@
 name: 'Install Goss'
-description: 'Install Goss (and dgoss) into GitHub actions runner'
+description: 'Install Goss (dgoss, dcgoss, kgoss) into GitHub actions runner'
 author: 'ivan.voskoboiynk@gmail.com'
 inputs:
   version:
