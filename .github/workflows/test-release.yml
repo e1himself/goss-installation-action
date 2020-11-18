@@ -1,6 +1,8 @@
 name: "Test release"
 on: # rebuild any PRs and main branch changes
   pull_request:
+    branches:
+      - 'release/*'
   push:
     branches:
       - 'release/*'
