@@ -3,7 +3,7 @@ import * as core from '@actions/core'
 import * as tc from '@actions/tool-cache'
 
 const ARCH = 'amd64'
-const DEFAULT_VERSION = 'v0.3.13'
+const DEFAULT_VERSION = 'v0.3.14'
 
 interface CommandsMap {
   [command: string]: string
