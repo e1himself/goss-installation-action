@@ -1,9 +1,10 @@
-import fs from 'fs'
 import * as core from '@actions/core'
 import * as tc from '@actions/tool-cache'
+import fs from 'fs'
 
 const ARCH = 'amd64'
-const DEFAULT_VERSION = 'v0.3.14'
+const DEFAULT_VERSION = 'v0.3.16'
+const ERROR_MESSAGE = 'Failed to install goss'
 
 interface CommandsMap {
   [command: string]: string
@@ -47,7 +48,7 @@ async function download(urls: CommandsMap): Promise<CommandsMap> {
 async function chmod(paths: CommandsMap, mode: string): Promise<void> {
   await Promise.all(
     Object.values(paths).map(async path => {
-      return new Promise((resolve, reject) => {
+      return new Promise<void>((resolve, reject) => {
         fs.chmod(path, mode, err => {
           err ? reject(err) : resolve()
         })
@@ -85,8 +86,8 @@ async function run(): Promise<void> {
     await chmod(downloaded, '755')
     const cached = await cache(downloaded, version)
     addPaths(cached)
-  } catch (error) {
-    core.setFailed(error.message)
+  } catch (error: any) {
+    core.setFailed(error?.message || ERROR_MESSAGE)
   }
 }
 

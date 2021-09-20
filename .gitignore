@@ -1,3 +1,6 @@
+# Build-time folders
+dist
+
 # Dependency directory
 node_modules
 
