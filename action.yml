@@ -7,7 +7,7 @@ inputs:
     default: 'v0.3.9'
     required: false
 runs:
-  using: 'node12'
+  using: 'node16'
   main: 'dist/index.js'
 branding:
   icon: 'briefcase'
