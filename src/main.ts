@@ -3,7 +3,7 @@ import * as tc from '@actions/tool-cache'
 import fs from 'fs'
 
 const ARCH = 'amd64'
-const DEFAULT_VERSION = 'v0.3.16'
+const DEFAULT_VERSION = 'v0.3.20'
 const ERROR_MESSAGE = 'Failed to install goss'
 
 interface CommandsMap {
