@@ -21,7 +21,7 @@ async function getUrls(version: string): Promise<CommandsMap> {
       throw new Error('Failed to fetch the latest release of "goss-org/goss".')
     }
 
-    const [latest] = await response.json()
+    const [latest] = (await response.json()) as { tag_name: string }[]
 
     return getUrls(latest.tag_name)
   }
