@@ -9,6 +9,6 @@ test('test runs', () => {
     RUNNER_TEMP: '/tmp',
     RUNNER_TOOL_CACHE: '/tmp'
   }
-  const ip = path.join(__dirname, '..', 'lib', 'main.js')
-  console.log(cp.execSync(`node ${ip}`, { env }).toString())
+  const script = path.join(__dirname, '..', 'lib', 'main.js')
+  console.log(cp.execSync(`node --env-file=.env ${script}`, { env }).toString())
 })
