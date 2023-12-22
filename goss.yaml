@@ -1,0 +1,22 @@
+command:
+  goss:
+    exit-status: 0
+    exec: "goss --help"
+    stdout:
+      - "goss - Quick and Easy server validation"
+
+  dgoss:
+    exit-status: 1
+    stderr:
+      - "ERROR: USAGE: dgoss"
+
+  kgoss:
+    exec: "kgoss --help"
+    exit-status: 2
+    stderr:
+      - "Usage:"
+
+  dcgoss:
+    exit-status: 1
+    stdout:
+      - "no docker-compose file found in ."
