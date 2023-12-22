@@ -1,0 +1,17 @@
+name: "Integration test"
+on: # rebuild any PRs and main branch changes
+  schedule:
+    - cron: '0 12 * * 1'
+
+jobs:
+  build: # make sure build/ci work properly
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: "Install goss & co"
+        uses: @e1himself/goss-installation-action
+
+      - name: "Validate installed tools"
+        run:  goss validate
+
