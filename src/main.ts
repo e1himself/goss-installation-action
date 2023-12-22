@@ -86,8 +86,9 @@ async function run(): Promise<void> {
     await chmod(downloaded, '755')
     const cached = await cache(downloaded, version)
     addPaths(cached)
-  } catch (error: any) {
-    core.setFailed(error?.message || ERROR_MESSAGE)
+  } catch (error) {
+    const message = error instanceof Error ? error.message : undefined
+    core.setFailed(message || ERROR_MESSAGE)
   }
 }
 
