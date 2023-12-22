@@ -2,6 +2,9 @@ name: "Integration test"
 on: # rebuild any PRs and main branch changes
   schedule:
     - cron: '0 12 * * 1'
+  push:
+    branches:
+      - master
 
 jobs:
   build: # make sure build/ci work properly
