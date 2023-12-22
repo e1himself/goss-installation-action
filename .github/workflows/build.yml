@@ -11,6 +11,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
+
+    - name: Setup Node.js v20
+      uses: actions/setup-node@v1
+      with:
+        node-version: 20
+
     - run: |
         npm install
         npm run all
