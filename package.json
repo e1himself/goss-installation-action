@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "description": "GOSS installation action for Github Actions",
+  "type": "module",
   "main": "lib/main.js",
   "scripts": {
     "build": "tsc",

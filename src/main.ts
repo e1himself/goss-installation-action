@@ -1,6 +1,6 @@
 import * as core from '@actions/core'
 import * as tc from '@actions/tool-cache'
-import fs from 'fs'
+import fs from 'node:fs'
 import fetch from 'node-fetch'
 
 const ARCH = 'amd64'
@@ -21,7 +21,7 @@ async function getUrls(version: string): Promise<CommandsMap> {
       throw new Error('Failed to fetch the latest release of "goss-org/goss".')
     }
 
-    const [latest] = (await response.json()) as { tag_name: string }[]
+    const latest = (await response.json()) as { tag_name: string }
 
     return getUrls(latest.tag_name)
   }
