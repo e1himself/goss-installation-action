@@ -3,14 +3,28 @@ import * as tc from '@actions/tool-cache'
 import fs from 'fs'
 
 const ARCH = 'amd64'
-const DEFAULT_VERSION = 'v0.4.4'
+const DEFAULT_VERSION = 'latest'
 const ERROR_MESSAGE = 'Failed to install goss'
 
 interface CommandsMap {
   [command: string]: string
 }
 
-function getUrls(version: string): CommandsMap {
+async function getUrls(version: string): Promise<CommandsMap> {
+  if (version === 'latest') {
+    const response = await fetch(
+      'https://api.github.com/repos/goss-org/goss/releases/latest'
+    )
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch the latest release of "goss-org/goss".')
+    }
+
+    const [latest] = await response.json()
+
+    return getUrls(latest.tag_name)
+  }
+
   return {
     goss: `https://github.com/goss-org/goss/releases/download/${version}/goss-linux-${ARCH}`,
     dgoss: `https://raw.githubusercontent.com/goss-org/goss/${version}/extras/dgoss/dgoss`,
