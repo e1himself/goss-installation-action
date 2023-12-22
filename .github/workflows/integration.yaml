@@ -10,7 +10,7 @@ jobs:
       - uses: actions/checkout@v1
 
       - name: "Install goss & co"
-        uses: @e1himself/goss-installation-action
+        uses: e1himself/goss-installation-action
 
       - name: "Validate installed tools"
         run:  goss validate
