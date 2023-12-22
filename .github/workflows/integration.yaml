@@ -4,7 +4,7 @@ on: # rebuild any PRs and main branch changes
     - cron: '0 12 * * 1'
   push:
     branches:
-      - master
+      - 'release/*'
 
 jobs:
   build: # make sure build/ci work properly
