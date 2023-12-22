@@ -27,7 +27,8 @@
   "dependencies": {
     "@actions/core": "^1.9.1",
     "@actions/io": "^1.0.2",
-    "@actions/tool-cache": "^1.6.1"
+    "@actions/tool-cache": "^1.6.1",
+    "node-fetch": "^3.3.2"
   },
   "devDependencies": {
     "@types/jest": "^29.5.11",
