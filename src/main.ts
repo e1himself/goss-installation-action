@@ -3,7 +3,7 @@ import * as tc from '@actions/tool-cache'
 import fs from 'fs'
 
 const ARCH = 'amd64'
-const DEFAULT_VERSION = 'v0.3.20'
+const DEFAULT_VERSION = 'v0.4.4'
 const ERROR_MESSAGE = 'Failed to install goss'
 
 interface CommandsMap {
@@ -12,10 +12,10 @@ interface CommandsMap {
 
 function getUrls(version: string): CommandsMap {
   return {
-    goss: `https://github.com/aelsabbahy/goss/releases/download/${version}/goss-linux-${ARCH}`,
-    dgoss: `https://raw.githubusercontent.com/aelsabbahy/goss/${version}/extras/dgoss/dgoss`,
-    dcgoss: `https://raw.githubusercontent.com/aelsabbahy/goss/${version}/extras/dcgoss/dcgoss`,
-    kgoss: `https://raw.githubusercontent.com/aelsabbahy/goss/${version}/extras/kgoss/kgoss`
+    goss: `https://github.com/goss-org/goss/releases/download/${version}/goss-linux-${ARCH}`,
+    dgoss: `https://raw.githubusercontent.com/goss-org/goss/${version}/extras/dgoss/dgoss`,
+    dcgoss: `https://raw.githubusercontent.com/goss-org/goss/${version}/extras/dcgoss/dcgoss`,
+    kgoss: `https://raw.githubusercontent.com/goss-org/goss/${version}/extras/kgoss/kgoss`
   }
 }
 
@@ -80,7 +80,7 @@ async function run(): Promise<void> {
   try {
     const version: string =
       core.getInput('version', { required: false }) || DEFAULT_VERSION
-    const urls = getUrls(version)
+    const urls = await getUrls(version)
     const missing = restore(urls, version)
     const downloaded = await download(missing)
     await chmod(downloaded, '755')
