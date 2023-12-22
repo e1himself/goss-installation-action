@@ -1,7 +1,6 @@
 import * as core from '@actions/core'
 import * as tc from '@actions/tool-cache'
 import fs from 'node:fs'
-import fetch from 'node-fetch'
 
 const ARCH = 'amd64'
 const DEFAULT_VERSION = 'latest'
