@@ -20,7 +20,7 @@ Read more about Goss at https://goss.rocks/.
 ## Example usage
 
 ```yml
-uses: e1himself/goss-installation-action
+uses: e1himself/goss-installation-action@v1
 with:
   version: 'v0.4.4'
 ```
