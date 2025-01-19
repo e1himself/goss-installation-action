@@ -102,7 +102,7 @@ async function run(): Promise<void> {
   try {
     const version: string =
       core.getInput('version', { required: false }) || DEFAULT_VERSION
-    const platform: string = `${
+    const platform = `${
       core.platform.isWindows ? 'windows' : core.platform.platform
     }-${ARCH_MAP[core.platform.arch] || core.platform.arch}`
 
