@@ -6,11 +6,19 @@ const ARCH = 'amd64'
 const DEFAULT_VERSION = 'latest'
 const ERROR_MESSAGE = 'Failed to install goss'
 
+const ARCH_MAP: { [arch: string]: string } = {
+  ia32: '386',
+  x64: 'amd64'
+}
+
 interface CommandsMap {
   [command: string]: string
 }
 
-async function getUrls(version: string): Promise<CommandsMap> {
+async function getUrls(
+  platform: string,
+  version: string
+): Promise<CommandsMap> {
   if (version === 'latest') {
     const response = await fetch(
       'https://api.github.com/repos/goss-org/goss/releases/latest'
@@ -22,11 +30,11 @@ async function getUrls(version: string): Promise<CommandsMap> {
 
     const latest = (await response.json()) as { tag_name: string }
 
-    return getUrls(latest.tag_name)
+    return getUrls(platform, latest.tag_name)
   }
 
   return {
-    goss: `https://github.com/goss-org/goss/releases/download/${version}/goss-linux-${ARCH}`,
+    goss: `https://github.com/goss-org/goss/releases/download/${version}/goss-${platform}`,
     dgoss: `https://raw.githubusercontent.com/goss-org/goss/${version}/extras/dgoss/dgoss`,
     dcgoss: `https://raw.githubusercontent.com/goss-org/goss/${version}/extras/dcgoss/dcgoss`,
     kgoss: `https://raw.githubusercontent.com/goss-org/goss/${version}/extras/kgoss/kgoss`
@@ -77,7 +85,7 @@ async function cache(
 ): Promise<CommandsMap> {
   const results = await Promise.all(
     Object.entries(paths).map(async ([command, path]) => {
-      const cached = await tc.cacheFile(path, command, command, version, ARCH)
+      const cached = await tc.cacheFile(path, command, command, version)
       return { [command]: cached }
     })
   )
@@ -94,7 +102,11 @@ async function run(): Promise<void> {
   try {
     const version: string =
       core.getInput('version', { required: false }) || DEFAULT_VERSION
-    const urls = await getUrls(version)
+    const platform: string = `${
+      core.platform.isWindows ? 'windows' : core.platform.platform
+    }-${ARCH_MAP[core.platform.arch] || core.platform.arch}`
+
+    const urls = await getUrls(platform, version)
     const missing = restore(urls, version)
     const downloaded = await download(missing)
     await chmod(downloaded, '755')
