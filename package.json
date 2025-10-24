@@ -11,7 +11,7 @@
     "format-check": "prettier --check **/*.ts",
     "lint": "eslint src/**/*.ts",
     "pack": "ncc build",
-    "test": "jest",
+    "test": "cp -f .env.test .env && jest",
     "all": "npm run build && npm run format && npm run lint && npm run pack && npm test"
   },
   "repository": {
