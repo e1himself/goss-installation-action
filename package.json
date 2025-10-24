@@ -11,7 +11,7 @@
     "format-check": "prettier --check **/*.ts",
     "lint": "eslint src/**/*.ts",
     "pack": "ncc build",
-    "test": "jest",
+    "test": "cp -f .env.test .env && jest",
     "all": "npm run build && npm run format && npm run lint && npm run pack && npm test"
   },
   "repository": {
@@ -26,9 +26,9 @@
   "author": "Ivan Voskoboinyk <ivan@voskoboinyk.com>",
   "license": "MIT",
   "dependencies": {
-    "@actions/core": "^1.10.1",
+    "@actions/core": "^1.11.1",
     "@actions/io": "^1.1.3",
-    "@actions/tool-cache": "^2.0.1"
+    "@actions/tool-cache": "^2.0.2"
   },
   "devDependencies": {
     "@types/jest": "^29.5.11",
